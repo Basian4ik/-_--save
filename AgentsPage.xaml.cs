@@ -23,6 +23,10 @@ namespace Баязитов_глазки_save
         public AgentsPage()
         {
             InitializeComponent();
+
+            var currentAgents = БаязитовГлазкиEntities.GetContext().Agent.ToList();
+
+            AgentListView.ItemsSource = currentAgents;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
