@@ -11,8 +11,7 @@ namespace Баязитов_глазки_save
 {
     using System;
     using System.Collections.Generic;
-    using System.Data;
-
+    
     public partial class Agent
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -33,6 +32,7 @@ namespace Баязитов_глазки_save
                 return AgentType.Title;
             }
         }
+
         public string Title { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
@@ -42,24 +42,28 @@ namespace Баязитов_глазки_save
         public string DirectorName { get; set; }
         public string INN { get; set; }
         public string KPP { get; set; }
-
         public string AgentPhotoPath
         {
             get
             {
                 if (Logo == null)
                     return null;
+                return "Img" + Logo;  // Возвращаем относительный путь
 
-                return "Img"+ Logo;
+
             }
         }
 
-        public int SelesForYear { get
+        public int SalesForYear
+        {
+            get
             {
                 int sales = 0;
                 foreach (ProductSale p in ProductSale)
                 {
                     TimeSpan differenceWithoutTime = DateTime.Today.Date - p.SaleDate.Date;
+                    //if ((int)differenceWithoutTime.TotalDays <=365)
+                        // везде выдаст 0 т.к. очень старые даты
                         sales += p.ProductCount;
                 }
                 return sales;
@@ -81,6 +85,7 @@ namespace Баязитов_глазки_save
         {
             get
             {
+                
                 if (this.Sales >= 500000)
                     return 25;
                 if (this.Sales >= 150000)
@@ -92,7 +97,7 @@ namespace Баязитов_глазки_save
                 return 0;
             }
         }
-        public string FontStyle
+        public string FonStyle
         {
             get
             {
@@ -103,7 +108,7 @@ namespace Баязитов_глазки_save
             }
         }
 
-    
+
         public virtual AgentType AgentType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AgentPriorityHistory> AgentPriorityHistory { get; set; }

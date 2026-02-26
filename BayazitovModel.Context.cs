@@ -21,14 +21,13 @@ namespace Баязитов_глазки_save
         }
 
         private static БаязитовГлазкиEntities _context;
-
         public static БаязитовГлазкиEntities GetContext()
         {
-            if (_context == null )
+            if (_context == null)
                 _context = new БаязитовГлазкиEntities();
             return _context;
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
