@@ -24,5 +24,15 @@ namespace Баязитов_глазки_save
         {
             InitializeComponent();
         }
+
+        private void ChangePictureBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //
+            //if (myOpenFileDialog.ShowDialog()==true)
+            //{
+              //  currentAgent.Logo = myOpenFileDialog.FileName;
+                //LogoImage.Source = new BitmapImage(new Uri(myOpenFileDialog.FileName));
+            //}
+        }
     }
 }

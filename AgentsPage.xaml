@@ -61,7 +61,12 @@
 
 
 
-        <ListView Grid.Row="2" Name="AgentListView" >
+        <ListView Grid.Row="2" Name="AgentListView"  >
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Редактировать" Click="MenuItem_Click"></MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Background="{Binding FonStyle}">
@@ -113,7 +118,16 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Button Content="Изменить приоритет на. ." Name="ChangePriorityBtn" Width="200" FontSize="15"
+        Click="ChangePriorityBtn_Click"  Visibility="Hidden"></Button>
+
+            <Button Content="Добавить агента" Name="AddAgentBtn" FontSize="15" Width="200" Margin="5, 0, 0, 0"
+            Click="AddAgentBtn_Click"></Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="LeftDirButton" Content="&lt;" Width="20" Height="30" Click="LeftDirButton_Click"></Button>
             <ListBox FontSize="20" Name="PageListBox" Width="245" Height="30" SelectionChanged="PageListBox_SelectionChanged_1" MouseUp="PageListBox_MouseUp">
                 <ListBox.ItemsPanel>

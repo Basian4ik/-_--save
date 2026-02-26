@@ -29,6 +29,8 @@ namespace Баязитов_глазки_save
 
         int CurrentPage = 0;
 
+        int NumberAgents = 10;
+
         List<Agent> CurrentPageList = new List<Agent>();
         List<Agent> TableList=new List<Agent>();
         public AgentsPage()
@@ -132,7 +134,7 @@ namespace Баязитов_глазки_save
             // Сохраняем в TableList
             TableList = filteredAgents.ToList();
 
-            // Вызываем ChangePage для начальной загрузки (direction = 0)
+            // Вызываем ChangePage для начальной загрузки
             ChangePage(0, 0);
         }
         private bool IsPhoneMatch(string phone, string searchText, string digitsOnlySearch)
@@ -140,7 +142,7 @@ namespace Баязитов_глазки_save
             if (string.IsNullOrEmpty(phone))
                 return false;
 
-            // Вариант 1: Поиск только по цифрам (для номеров типа "799232")
+            // Поиск только по цифрам
             if (!string.IsNullOrEmpty(digitsOnlySearch))
             {
                 // Извлекаем только цифры из телефона
@@ -151,7 +153,7 @@ namespace Баязитов_глазки_save
                     return true;
             }
 
-            // Вариант 2: Поиск по тексту (если ввели что-то кроме цифр)
+            //Поиск по тексту (если ввели что-то кроме цифр)
             if (!string.IsNullOrEmpty(searchText))
             {
                 return phone.ToLower().Contains(searchText.ToLower());
@@ -206,84 +208,62 @@ namespace Баязитов_глазки_save
         {
 
         }
+        private void UpdatePageControls()
+        {
+            PageListBox.Items.Clear();
+            for (int i = 1; i <= CountPage; i++)
+            {
+                PageListBox.Items.Add(i);
+            }
+            PageListBox.SelectedIndex = CurrentPage;
+
+           
+
+            AgentListView.ItemsSource = CurrentPageList;
+            AgentListView.Items.Refresh();
+        }
         private void ChangePage(int direction, int? selectedPage)
         {
             CurrentPageList.Clear();
             CountRecords = TableList.Count;
+            CountPage = (int)Math.Ceiling((double)CountRecords / NumberAgents); // Упрощённый расчёт количества страниц
 
-            if (CountRecords % 10 > 0)
+            // Определяем новую страницу
+            if (selectedPage.HasValue && selectedPage >= 0 && selectedPage < CountPage)
             {
-                CountPage = CountRecords / 10 + 1;
-            }
-            else
-            {
-                CountPage = CountRecords / 10;
-            }
-
-            Boolean Ifupdate = true;
-            int min;
-
-            if (selectedPage.HasValue)
-            {
-                if (selectedPage >= 0 && selectedPage <= CountPage)
-                {
-                    CurrentPage = (int)selectedPage;
-                    min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                    for (int i = CurrentPage * 10; i < min; i++)
-                    {
-                        CurrentPageList.Add(TableList[i]);
-                    }
-                }
+                CurrentPage = selectedPage.Value;
             }
             else
             {
                 switch (direction)
                 {
-                    case 1: // предыдущая
-                        if (CurrentPage > 0)
-                        {
-                            CurrentPage--;
-                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                            for (int i = CurrentPage * 10; i < min; i++)
-                            {
-                                CurrentPageList.Add(TableList[i]);
-                            }
-                        }
-                        else
-                        {
-                            Ifupdate = false;
-                        }
-                        break;
-
-                    case 2: // следующая
-                        if (CurrentPage < CountPage - 1)
-                        {
-                            CurrentPage++;
-                            min = CurrentPage * 10 + 10 < CountRecords ? CurrentPage * 10 + 10 : CountRecords;
-                            for (int i = CurrentPage * 10; i < min; i++)
-                            {
-                                CurrentPageList.Add(TableList[i]);
-                            }
-                        }
-                        else
-                        {
-                            Ifupdate = false;
-                        }
-                        break;
+                    case 1 when CurrentPage > 0: CurrentPage--; break;
+                    case 2 when CurrentPage < CountPage - 1: CurrentPage++; break;
                 }
             }
 
-            if (Ifupdate)
-            {
-                PageListBox.Items.Clear();
-                for (int i = 1; i <= CountPage; i++)
-                {
-                    PageListBox.Items.Add(i);
-                }
-                PageListBox.SelectedIndex = CurrentPage;
-                AgentListView.ItemsSource = CurrentPageList;
-                AgentListView.Items.Refresh();
-            }
+            // Заполняем текущую страницу
+            int startIndex = CurrentPage * NumberAgents;
+            int endIndex = Math.Min(startIndex + NumberAgents, CountRecords);
+            CurrentPageList = TableList.Skip(startIndex).Take(NumberAgents).ToList();
+
+            // Обновляем UI
+            UpdatePageControls();
+        }
+
+        private void ChangePriorityBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddAgentBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage());
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
