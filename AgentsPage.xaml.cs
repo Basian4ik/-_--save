@@ -179,11 +179,6 @@ namespace Баязитов_глазки_save
             UpdateAgents();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Manager.MainFrame.Navigate(new AddEditPage());
-        }
-
         private void LeftDirButton_Click(object sender, RoutedEventArgs e)
         {
             ChangePage(1, null);
@@ -258,12 +253,12 @@ namespace Баязитов_глазки_save
 
         private void AddAgentBtn_Click(object sender, RoutedEventArgs e)
         {
-            Manager.MainFrame.Navigate(new AddEditPage());
+            Manager.MainFrame.Navigate(new AddEditPage(null));
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Agent));
         }
     }
 }

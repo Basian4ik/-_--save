@@ -75,7 +75,7 @@
             <TextBox Text="{Binding Phone}" FontSize="15" Height="20" Width="250"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Сохранить"></Button>
+            <Button Content="Сохранить" Click="Button_Click"></Button>
         </StackPanel>
         <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Удалить"></Button>
