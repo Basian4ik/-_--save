@@ -23,16 +23,16 @@ namespace Баязитов_глазки_save
     {
         private IEnumerable<Agent> allAgents;
 
-        int CountRecords=0;
+        int CountRecords = 0;
 
-        int CountPage=1;
+        int CountPage = 1;
 
         int CurrentPage = 0;
 
         int NumberAgents = 10;
 
         List<Agent> CurrentPageList = new List<Agent>();
-        List<Agent> TableList=new List<Agent>();
+        List<Agent> TableList = new List<Agent>();
         public AgentsPage()
         {
             InitializeComponent();
@@ -44,13 +44,15 @@ namespace Баязитов_глазки_save
             this.IsVisibleChanged += Page_IsVisibleChanged;
         }
 
-        
 
-        
+
+
         private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (Visibility == Visibility.Visible)
             {
+                БаязитовГлазкиEntities.GetContext().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
+                AgentListView.ItemsSource = БаязитовГлазкиEntities.GetContext().Agent.ToList();
                 // Загружаем всех агентов один раз
                 allAgents = БаязитовГлазкиEntities.GetContext().Agent.ToList();
 
@@ -60,8 +62,11 @@ namespace Баязитов_глазки_save
                 // Устанавливаем сортировку по умолчанию (по наименованию)
                 SortComboBox.SelectedIndex = 0;
 
+
+
                 // Обновляем список
                 UpdateAgents();
+                AgentListView.Items.Refresh();
             }
         }
 
@@ -198,7 +203,7 @@ namespace Баязитов_глазки_save
             }
         }
 
- 
+
         private void PageListBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
 
@@ -212,7 +217,7 @@ namespace Баязитов_глазки_save
             }
             PageListBox.SelectedIndex = CurrentPage;
 
-           
+
 
             AgentListView.ItemsSource = CurrentPageList;
             AgentListView.Items.Refresh();
@@ -245,10 +250,51 @@ namespace Баязитов_глазки_save
             // Обновляем UI
             UpdatePageControls();
         }
+        private void AgentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (AgentListView.SelectedItems.Count > 0)
+            {
+                ChangePriorityBtn.Visibility = Visibility.Visible;
+            }
 
+            else
+            {
+                ChangePriorityBtn.Visibility = Visibility.Hidden;
+            }
+        }
         private void ChangePriorityBtn_Click(object sender, RoutedEventArgs e)
         {
+            int maxPriority = 0;
 
+            foreach (Agent selectedAgent in AgentListView.SelectedItems)
+            {
+                if (selectedAgent.Priority > maxPriority)
+                    maxPriority = selectedAgent.Priority;
+            }
+
+            PriorityChangeWindow prior = new PriorityChangeWindow(maxPriority);
+            prior.Owner = Window.GetWindow(this);
+            prior.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            prior.ShowDialog();
+            int newPriority = Convert.ToInt32(prior.TBPriority.Text);
+
+            foreach (Agent agent in AgentListView.SelectedItems)
+            {
+                agent.Priority = newPriority;
+            }
+
+            try
+            {
+                БаязитовГлазкиEntities.GetContext().SaveChanges();
+                AgentListView.SelectedItems.Clear();
+                UpdateAgents();
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void AddAgentBtn_Click(object sender, RoutedEventArgs e)
@@ -258,7 +304,12 @@ namespace Баязитов_глазки_save
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Agent));
+            Manager.MainFrame.Navigate(new AddEditPage(AgentListView.SelectedItem as Agent));
+        }
+
+        private void AgentListView_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

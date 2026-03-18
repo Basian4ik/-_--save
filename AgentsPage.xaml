@@ -61,7 +61,7 @@
 
 
 
-        <ListView Grid.Row="2" Name="AgentListView"  >
+        <ListView Grid.Row="2" Name="AgentListView" SelectionChanged="AgentListView_SelectionChanged"  >
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Редактировать" Click="MenuItem_Click"></MenuItem>
@@ -129,7 +129,7 @@
 
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Name="LeftDirButton" Content="&lt;" Width="20" Height="30" Click="LeftDirButton_Click"></Button>
-            <ListBox FontSize="20" Name="PageListBox" Width="245" Height="30" SelectionChanged="PageListBox_SelectionChanged_1" MouseUp="PageListBox_MouseUp">
+            <ListBox FontSize="20" Name="PageListBox" Width="285" Height="30" SelectionChanged="PageListBox_SelectionChanged_1" MouseUp="PageListBox_MouseUp">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal"/>
