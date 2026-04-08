@@ -36,7 +36,7 @@ namespace Баязитов_глазки_save
         {
             InitializeComponent();
 
-            _context = new БаязитовГлазкиEntities(); // создаём свой контекст
+            _context = new БаязитовГлазкиEntities();
 
             // Загружаем все продукты для ComboBox
             _allProducts = _context.Product.ToList();
@@ -62,6 +62,9 @@ namespace Баязитов_глазки_save
                     ComboType.SelectedIndex = currentAgent.AgentTypeID - 1;
                     DeleteBtn.Visibility = Visibility.Visible;
                     _sales = currentAgent.ProductSale.ToList();
+
+                    // ПОКАЗЫВАЕМ блок истории продаж (только при редактировании)
+                    SalesHistoryPanel.Visibility = Visibility.Visible;
                 }
             }
             else // новый агент
@@ -70,6 +73,9 @@ namespace Баязитов_глазки_save
                 currentAgent.ProductSale = new List<ProductSale>();
                 DeleteBtn.Visibility = Visibility.Hidden;
                 _sales = new List<ProductSale>();
+
+                // СКРЫВАЕМ блок истории продаж (при добавлении нового агента)
+                SalesHistoryPanel.Visibility = Visibility.Collapsed;
             }
 
             DataContext = currentAgent;

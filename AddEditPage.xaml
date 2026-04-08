@@ -1,5 +1,4 @@
-﻿ 
- <Page x:Class="Баязитов_глазки_save.AddEditPage"
+﻿<Page x:Class="Баязитов_глазки_save.AddEditPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -113,49 +112,46 @@
             <Button Name="DeleteBtn" Content="Удалить" Click="DeleteBtn_Click"></Button>
         </StackPanel>
 
+        <!-- Контейнер для блока истории продаж (скрыт по умолчанию) -->
+        <StackPanel x:Name="SalesHistoryPanel" Grid.Row="6" Grid.ColumnSpan="2" 
+                    Grid.RowSpan="3" Visibility="Collapsed">
 
+            <TextBlock Text="История продаж" FontSize="18" Height="20" Margin="10,5"/>
 
-        <TextBlock Grid.Row="6" Grid.ColumnSpan="2" Text="История продаж" FontSize="18" 
-                   Height="20" Margin="10,5"></TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="10,5">
+                <TextBlock Text="Продукт:" VerticalAlignment="Center" FontSize="15" 
+                           Height="20" Margin="5"></TextBlock>
 
-        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10,5">
-            <TextBlock Text="Продукт:" VerticalAlignment="Center" FontSize="15" 
-                       Height="20" Margin="5"></TextBlock>
+                <ComboBox Name="ProductCombo" Width="400" IsEditable="True" FontSize="15" 
+                          DisplayMemberPath="Title" Margin="5"
+                          IsTextSearchEnabled="False"></ComboBox>
 
-            <ComboBox Name="ProductCombo" Width="400" IsEditable="True" FontSize="15" 
-                      DisplayMemberPath="Title" Margin="5"
-                      IsTextSearchEnabled="False"></ComboBox>
+                <TextBlock Text="Кол-во:" VerticalAlignment="Center" FontSize="15"
+                           Height="20" Margin="5"></TextBlock>
 
-            <TextBlock Text="Кол-во:" VerticalAlignment="Center" FontSize="15"
-                       Height="20" Margin="5"></TextBlock>
+                <TextBox Name="ProductCountBox" FontSize="15" Height="20" Width="60" Margin="5"></TextBox>
 
-            <TextBox Name="ProductCountBox" FontSize="15" Height="20" Width="60" Margin="5"></TextBox>
+                <TextBlock Text="Дата:" VerticalAlignment="Center" FontSize="15" Height="20" Margin="5"></TextBlock>
 
-            <TextBlock Text="Дата:" VerticalAlignment="Center" FontSize="15" Height="20" Margin="5"></TextBlock>
+                <DatePicker Name="SaleDatePicker" FontSize="15" Width="150" Margin="5"></DatePicker>
 
-            <DatePicker Name="SaleDatePicker" FontSize="15" Width="150" Margin="5"></DatePicker>
+                <Button Content="Добавить" Name="AddSaleBtn" Click="AddSaleBtn_Click" Width="100" Margin="5"></Button>
+            </StackPanel>
 
-            <Button Content="Добавить" Name="AddSaleBtn" Click="AddSaleBtn_Click" Width="100" Margin="5"></Button>
+            <ListView Name="SalesListView" Margin="10" SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Product.Title}" FontSize="15" Height="20" Width="400"></TextBlock>
+                            <TextBlock Text="{Binding ProductCount}" FontSize="15" Height="20" Width="60"></TextBlock>
+                            <TextBlock Text="{Binding SaleDate, StringFormat=d}" FontSize="15" Height="20" Width="100"></TextBlock>
+                            <Button Content="Удалить" Name="DeleteSaleBtn" Tag="{Binding}" Click="DeleteSaleBtn_Click" 
+                                    Width="85"></Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
-
-        <ListView Name="SalesListView" Grid.Row="8" Grid.ColumnSpan="2" Margin="10" 
-                  SelectionMode="Single">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-
-                        <TextBlock Text="{Binding Product.Title}" FontSize="15" Height="20" Width="400"></TextBlock>
-
-                        <TextBlock Text="{Binding ProductCount}" FontSize="15" Height="20" Width="60"></TextBlock>
-
-                        <TextBlock Text="{Binding SaleDate, StringFormat=d}" FontSize="15" Height="20" Width="100"></TextBlock>
-
-                        <Button Content="Удалить" Name="DeleteSaleBtn" Tag="{Binding}" Click="DeleteSaleBtn_Click" 
-                                Width="85"></Button>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
 
     </Grid>
 </Page>
